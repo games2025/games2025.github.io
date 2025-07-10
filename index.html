@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
   <style>
     body {
       font-family: sans-serif;
@@ -22,15 +22,14 @@
       font-size: 20px;
       padding: 10px 20px;
       margin-bottom: 10px;
+      touch-action: manipulation; /* Prevent double-tap zoom */
     }
   </style>
 </head>
 <body onload="startGame()">
 
-<!-- This is where the canvas will be inserted -->
 <div id="game-container"></div>
 
-<!-- Controls go here -->
 <div id="controls">
   <button 
     onmousedown="accelerate(-0.2)" 
@@ -161,7 +160,7 @@ function accelerate(n) {
     myGamePiece.gravity = n;
 }
 </script>
+
 </body>
 </html>
-
 
