@@ -3,19 +3,45 @@
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <style>
-    canvas {
-      border:1px solid #d3d3d3;
-      background-color: #f1f1f1;
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 0;
     }
-
+    canvas {
+      border: 1px solid #d3d3d3;
+      background-color: #f1f1f1;
+      display: block;
+      margin: 0 auto;
+    }
+    #controls {
+      margin-top: 10px;
+    }
     button {
       font-size: 20px;
       padding: 10px 20px;
-      margin-top: 10px;
+      margin-bottom: 10px;
     }
   </style>
 </head>
 <body onload="startGame()">
+
+<!-- This is where the canvas will be inserted -->
+<div id="game-container"></div>
+
+<!-- Controls go here -->
+<div id="controls">
+  <button 
+    onmousedown="accelerate(-0.2)" 
+    onmouseup="accelerate(0.05)" 
+    ontouchstart="accelerate(-0.2)" 
+    ontouchend="accelerate(0.05)">
+    ACCELERATE
+  </button>
+  <p>Use the ACCELERATE button to stay in the air</p>
+  <p>How long can you stay alive?</p>
+</div>
 
 <script>
 var myGamePiece;
@@ -35,14 +61,14 @@ var myGameArea = {
         this.canvas.width = 480;
         this.canvas.height = 270;
         this.context = this.canvas.getContext("2d");
-        document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+        document.getElementById("game-container").appendChild(this.canvas);
         this.frameNo = 0;
         this.interval = setInterval(updateGameArea, 20);
     },
     clear : function() {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
-}
+};
 
 function component(width, height, color, x, y, type) {
     this.type = type;
@@ -81,25 +107,25 @@ function component(width, height, color, x, y, type) {
     }
     this.crashWith = function(otherobj) {
         var myleft = this.x;
-        var myright = this.x + (this.width);
+        var myright = this.x + this.width;
         var mytop = this.y;
-        var mybottom = this.y + (this.height);
+        var mybottom = this.y + this.height;
         var otherleft = otherobj.x;
-        var otherright = otherobj.x + (otherobj.width);
+        var otherright = otherobj.x + otherobj.width;
         var othertop = otherobj.y;
-        var otherbottom = otherobj.y + (otherobj.height);
+        var otherbottom = otherobj.y + otherobj.height;
         var crash = true;
         if ((mybottom < othertop) || (mytop > otherbottom) || 
             (myright < otherleft) || (myleft > otherright)) {
             crash = false;
         }
         return crash;
-    }
+    };
 }
 
 function updateGameArea() {
     var x, height, gap, minHeight, maxHeight, minGap, maxGap;
-    for (i = 0; i < myObstacles.length; i += 1) {
+    for (i = 0; i < myObstacles.length; i++) {
         if (myGamePiece.crashWith(myObstacles[i])) {
             return;
         } 
@@ -110,14 +136,14 @@ function updateGameArea() {
         x = myGameArea.canvas.width;
         minHeight = 20;
         maxHeight = 200;
-        height = Math.floor(Math.random()*(maxHeight-minHeight+1)+minHeight);
+        height = Math.floor(Math.random()*(maxHeight - minHeight + 1) + minHeight);
         minGap = 50;
         maxGap = 200;
-        gap = Math.floor(Math.random()*(maxGap-minGap+1)+minGap);
+        gap = Math.floor(Math.random()*(maxGap - minGap + 1) + minGap);
         myObstacles.push(new component(10, height, "green", x, 0));
         myObstacles.push(new component(10, x - height - gap, "green", x, height + gap));
     }
-    for (i = 0; i < myObstacles.length; i += 1) {
+    for (i = 0; i < myObstacles.length; i++) {
         myObstacles[i].x += -1;
         myObstacles[i].update();
     }
@@ -135,5 +161,7 @@ function accelerate(n) {
     myGamePiece.gravity = n;
 }
 </script>
+</body>
+</html>
 
 
