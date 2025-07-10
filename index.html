@@ -1,17 +1,23 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<style>
-canvas {
-    border:1px solid #d3d3d3;
-    background-color: #f1f1f1;
-}
-</style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <style>
+    canvas {
+      border:1px solid #d3d3d3;
+      background-color: #f1f1f1;
+    }
+
+    button {
+      font-size: 20px;
+      padding: 10px 20px;
+      margin-top: 10px;
+    }
+  </style>
 </head>
 <body onload="startGame()">
-<script>
 
+<script>
 var myGamePiece;
 var myObstacles = [];
 var myScore;
@@ -32,7 +38,7 @@ var myGameArea = {
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
         this.frameNo = 0;
         this.interval = setInterval(updateGameArea, 20);
-        },
+    },
     clear : function() {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
@@ -83,7 +89,8 @@ function component(width, height, color, x, y, type) {
         var othertop = otherobj.y;
         var otherbottom = otherobj.y + (otherobj.height);
         var crash = true;
-        if ((mybottom < othertop) || (mytop > otherbottom) || (myright < otherleft) || (myleft > otherright)) {
+        if ((mybottom < othertop) || (mytop > otherbottom) || 
+            (myright < otherleft) || (myleft > otherright)) {
             crash = false;
         }
         return crash;
@@ -114,25 +121,19 @@ function updateGameArea() {
         myObstacles[i].x += -1;
         myObstacles[i].update();
     }
-    myScore.text="SCORE: " + myGameArea.frameNo;
+    myScore.text = "SCORE: " + myGameArea.frameNo;
     myScore.update();
     myGamePiece.newPos();
     myGamePiece.update();
 }
 
 function everyinterval(n) {
-    if ((myGameArea.frameNo / n) % 1 == 0) {return true;}
-    return false;
+    return (myGameArea.frameNo / n) % 1 === 0;
 }
 
 function accelerate(n) {
     myGamePiece.gravity = n;
 }
 </script>
-<br>
-<button onmousedown="accelerate(-0.2)" onmouseup="accelerate(0.05)">ACCELERATE</button>
-<p>Use the ACCELERATE button to stay in the air</p>
-<p> Find Out Your Highest Score </p>
-</body>
-</html>
+
 
